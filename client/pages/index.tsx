@@ -1,11 +1,11 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
 import Image from 'next/image'
-import { ChangeEvent, useEffect, useState } from 'react'
+import { ChangeEvent, useEffect, useReducer, useRef, useState } from 'react'
 import Alert, { IAlertState } from '../components/Alert'
 import Editor from '../components/Editor'
 import ParamDisplay from '../components/ParamDisplay'
-import { requestMeanPose } from '../helpers/APIHelper'
+import { requestMeanPose, solveIK } from '../helpers/APIHelper'
 import IManoHand from '../helpers/IManoHand'
 
 const Home: NextPage = () => {
@@ -15,6 +15,8 @@ const Home: NextPage = () => {
   const [alertState, setAlertState] = useState<IAlertState>({show: false, message: "no message"});
   const [waiting, setWaiting] = useState(false);
   const [manoHand, setManoHand] = useState<IManoHand | undefined>(undefined);
+
+  const newKeypointsRef = useRef<number[][]>();
 
   useEffect(() => {
     const hostname = window.location.hostname;
@@ -29,11 +31,10 @@ const Home: NextPage = () => {
 
   function updateAPIAddress(e: ChangeEvent<HTMLInputElement>) {
     const address = e.target.value as unknown as string;
-    console.log(address);
     setAPIAddress(address);
   }
 
-  function loadDefaultPose() {
+  function clickLoadDefaultPose() {
     if (numPCA == null || numPCA < 1) {
       setAlertState({show: true, message: "# of PCA should be > 0"});
       return;
@@ -45,7 +46,24 @@ const Home: NextPage = () => {
     requestMeanPose(apiAddress, numPCA).then((manoHand) => {
       setWaiting(false);
       setManoHand(manoHand);
-    });
+    }).catch((e) => {
+      setAlertState({show: true, message: "error getting the mean pose. check the console."});
+      console.error(e);
+      setWaiting(false)});
+  }
+
+  function clickSolveIK() {
+    if (newKeypointsRef.current == null) {
+      return;
+    }
+    setWaiting(true);
+    solveIK(apiAddress, newKeypointsRef.current, numPCA).then((manoHand) => {
+      setWaiting(false);
+      setManoHand(manoHand);
+    }).catch((e) => {
+      setAlertState({show: true, message: "error while solving IK. check the console."});
+      console.error(e);
+      setWaiting(false)});
   }
 
   return (
@@ -69,14 +87,14 @@ const Home: NextPage = () => {
               <span className="label-text"># of pose PCA</span>
             </label>
             <input type="text" className="input input-primary" defaultValue={numPCA} onChange={updateNumPCA} placeholder={"only integer larger than 3"}></input>
-            <button className='btn btn-primary mt-1' onClick={loadDefaultPose} disabled={waiting}>load default</button>
+            <button className='btn btn-primary mt-1' onClick={clickLoadDefaultPose} disabled={waiting}>load default</button>
           </div>
           <div className='border-2 h-full' id='editor-wrapper'>
-            <Editor manoHand={manoHand} />
+            <Editor newKeypointsRef={newKeypointsRef} manoHand={manoHand} />
           </div>
 
           <div className='flex flex-col my-2'>
-            <button className='btn btn-primary mt-1' disabled={waiting}>find mano params</button>
+            <button className='btn btn-primary mt-1' disabled={waiting} onClick={clickSolveIK}>find mano params</button>
             <ParamDisplay manoHand={manoHand} />
           </div>
         </div>

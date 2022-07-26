@@ -1,6 +1,7 @@
 import { OrbitControls, Select, Sphere, TransformControls, useSelect } from "@react-three/drei";
 import { useEffect, useState } from "react";
 import { Object3D, Vector3 } from "three";
+import CameraControl from "./CameraControl";
 import JointSphere from "./JointSphere";
 
 export interface IJointPlotProps {
@@ -33,7 +34,6 @@ export default function JointPlot(props: IJointPlotProps) {
     }, [props.keypoints]);
 
     function selectOnChange(objects: Object3D[]) {
-        console.log(objects);
         if (objects.length > 0) {
             setSelected(objects[0]);
         }
@@ -41,16 +41,15 @@ export default function JointPlot(props: IJointPlotProps) {
 
     function transformControlsEngage() {
         setTransforming(true);
-        console.log("transform");
     }
 
     function transformControlsDisengage() {
         setTransforming(false);
-        console.log("disengage");
     }
 
     return <>
-        <OrbitControls enabled={!transforming} />
+        {/* <OrbitControls enabled={!transforming} /> */}
+        <CameraControl enabled={!transforming} />
         {selected && <TransformControls object={selected} onMouseDown={transformControlsEngage} onMouseUp={transformControlsDisengage}/>}
         <Select onChange={selectOnChange}>
             {jointSpheres}

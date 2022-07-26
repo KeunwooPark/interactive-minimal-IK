@@ -12,13 +12,9 @@ export interface IEditorProps {
 
 export default function Editor(props: IEditorProps) {
 
-    useEffect(() => {
-        
-    }, [props.manoHand]); 
-
-    return (<Canvas linear camera={{position: [0, -50, 150]}}>
+    return (<Canvas linear>
         <primitive object={new THREE.AxesHelper(10)} />
-        <OrbitControls enabled={false} />
+        
         <JointPlot keypoints={props.manoHand == null? undefined : props.manoHand.keypoints} />
         <ambientLight />
     </Canvas>);

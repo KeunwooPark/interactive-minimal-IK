@@ -4,6 +4,7 @@ import Image from 'next/image'
 import { ChangeEvent, useEffect, useState } from 'react'
 import Alert, { IAlertState } from '../components/Alert'
 import Editor from '../components/Editor'
+import ParamDisplay from '../components/ParamDisplay'
 import { requestMeanPose } from '../helpers/APIHelper'
 import IManoHand from '../helpers/IManoHand'
 
@@ -34,8 +35,8 @@ const Home: NextPage = () => {
   }
 
   function loadDefaultPose() {
-    if (numPCA == null || numPCA < 3) {
-      setAlertState({show: true, message: "# of PCA should be > 3"});
+    if (numPCA == null || numPCA < 1) {
+      setAlertState({show: true, message: "# of PCA should be > 0"});
       return;
     }
 
@@ -45,6 +46,7 @@ const Home: NextPage = () => {
     requestMeanPose(apiAddress, numPCA).then((manoHand) => {
       setWaiting(false);
       setManoHand(manoHand);
+      console.log(manoHand);
     });
   }
 
@@ -74,10 +76,15 @@ const Home: NextPage = () => {
           <div className='border-2 h-full' id='editor-wrapper'>
             <Editor manoHand={manoHand} />
           </div>
+
+          <div className='flex flex-col my-2'>
+            <button className='btn btn-primary mt-1' disabled={waiting}>find mano params</button>
+            <ParamDisplay manoHand={manoHand} />
+          </div>
         </div>
       </div>
     </div>
   )
 }
 
-export default Home
+export default Home;

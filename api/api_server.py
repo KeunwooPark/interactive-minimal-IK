@@ -27,7 +27,7 @@ async def getMeanPose(n_pose: int):
     shape = np.random.normal(size=n_shape)
     vertices, keypoints = mesh.set_params(pose_pca=pose_pca, pose_glb=pose_glb, shape=shape)
     faces = mesh.faces
-    return {"keypoints": keypoints.tolist(), "vertices": vertices.tolist(), "faces": faces.tolist()}
+    return {"keypoints": keypoints.tolist(), "vertices": vertices.tolist(), "faces": faces.tolist(), "poseVec": pose_pca.tolist()}
 
 @app.get("/api")
 async def whoAmI():

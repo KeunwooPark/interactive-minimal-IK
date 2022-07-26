@@ -4,7 +4,6 @@ import React from "react";
 import * as THREE from "three";
 
 export default function Editor(props: any) {
-
     return (<Canvas>
         <primitive object={new THREE.AxesHelper(10)} />
         <OrbitControls />

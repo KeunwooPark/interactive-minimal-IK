@@ -14,7 +14,7 @@ const Home: NextPage = () => {
 
       <div className='flex h-screen'>
         <div className='m-auto h-1/2 w-1/2 text-5xl'>
-          <h1 className="text-center">interactive minimal IK</h1>
+          <h1 className="text-center mb-5">interactive minimal IK</h1>
           <div className='border-2 h-full' id='editor-wrapper'>
             <Editor />
             {/* <div>hey</div> */}

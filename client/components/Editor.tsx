@@ -18,7 +18,7 @@ export default function Editor(props: IEditorProps) {
 
     return (<Canvas linear camera={{position: [0, -50, 150]}}>
         <primitive object={new THREE.AxesHelper(10)} />
-        <OrbitControls />
+        <OrbitControls enabled={false} />
         <JointPlot keypoints={props.manoHand == null? undefined : props.manoHand.keypoints} />
         <ambientLight />
     </Canvas>);

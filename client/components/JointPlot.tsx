@@ -1,6 +1,7 @@
-import { Sphere } from "@react-three/drei";
+import { OrbitControls, Select, Sphere, TransformControls, useSelect } from "@react-three/drei";
 import { useEffect, useState } from "react";
-import { Vector3 } from "three";
+import { Object3D, Vector3 } from "three";
+import JointSphere from "./JointSphere";
 
 export interface IJointPlotProps {
     keypoints: number[][] | undefined;
@@ -8,7 +9,9 @@ export interface IJointPlotProps {
 
 export default function JointPlot(props: IJointPlotProps) {
     const [jointSpheres, setJointSpheres] = useState<JSX.Element[]>([]);
-    const sphereSize = 2;
+    const [selected, setSelected] = useState<Object3D>();
+    const [transforming, setTransforming] = useState(false);
+
     useEffect(() => {
         if (props.keypoints == null) {
             return;
@@ -18,9 +21,9 @@ export default function JointPlot(props: IJointPlotProps) {
         let keyId = 0;
         for (const keypoint of props.keypoints) {
             const position = new Vector3(keypoint[0], keypoint[1], keypoint[2]);
-            const sphere = <Sphere args={[sphereSize]} position={position} key={`joint-${keyId}`}>
-                <meshBasicMaterial color="hotpink" />
-            </Sphere>
+            const key = `joint-${keyId}`;
+            
+            const sphere = <JointSphere position={position} key={key} />
             spheres.push(sphere);
             keyId += 1;
         }
@@ -29,5 +32,28 @@ export default function JointPlot(props: IJointPlotProps) {
 
     }, [props.keypoints]);
 
-    return <>{jointSpheres}</>;
+    function selectOnChange(objects: Object3D[]) {
+        console.log(objects);
+        if (objects.length > 0) {
+            setSelected(objects[0]);
+        }
+    }
+
+    function transformControlsEngage() {
+        setTransforming(true);
+        console.log("transform");
+    }
+
+    function transformControlsDisengage() {
+        setTransforming(false);
+        console.log("disengage");
+    }
+
+    return <>
+        <OrbitControls enabled={!transforming} />
+        {selected && <TransformControls object={selected} onMouseDown={transformControlsEngage} onMouseUp={transformControlsDisengage}/>}
+        <Select onChange={selectOnChange}>
+            {jointSpheres}
+        </Select>
+    </>;
 }

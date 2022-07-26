@@ -1,6 +1,7 @@
 from config import *
 import pickle
 import numpy as np
+from pathlib import Path
 
 
 def prepare_mano_model():
@@ -22,9 +23,13 @@ def prepare_mano_model():
     'parents': data['kintree_table'][0].tolist(),
   }
   params['parents'][0] = None
+
+  converted_mano_model_path = Path(MANO_MODEL_PATH)
+  converted_mano_model_path.parent.mkdir(exist_ok=True)
+  converted_mano_model_path.touch(exist_ok=True)
+
   with open(MANO_MODEL_PATH, 'wb') as f:
     pickle.dump(params, f)
-
 
 def prepare_smpl_model():
   """

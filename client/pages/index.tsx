@@ -20,7 +20,6 @@ const Home: NextPage = () => {
     const hostname = window.location.hostname;
     const defaultAPIAddress = `http://${hostname}:8000`;
     setAPIAddress(defaultAPIAddress);
-    console.log(defaultAPIAddress);
   }, []);
 
   function updateNumPCA(e: ChangeEvent<HTMLInputElement>) {
@@ -46,7 +45,6 @@ const Home: NextPage = () => {
     requestMeanPose(apiAddress, numPCA).then((manoHand) => {
       setWaiting(false);
       setManoHand(manoHand);
-      console.log(manoHand);
     });
   }
 
@@ -59,7 +57,7 @@ const Home: NextPage = () => {
       </Head>
       
       <div className='flex h-screen'>
-        <div className='m-auto h-1/2 w-1/2 text-5xl'>
+        <div className='mt-3 mx-auto h-1/2 w-1/2 text-5xl'>
           <h1 className="text-center mb-5">interactive minimal IK</h1>
           <Alert {...alertState} />
           <div className='w-full form-control my-3'>

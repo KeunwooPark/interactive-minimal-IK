@@ -5,12 +5,15 @@ import { ChangeEvent, useEffect, useState } from 'react'
 import Alert, { IAlertState } from '../components/Alert'
 import Editor from '../components/Editor'
 import { requestMeanPose } from '../helpers/APIHelper'
+import IManoHand from '../helpers/IManoHand'
 
 const Home: NextPage = () => {
 
   const [numPCA, setNumPCA] = useState(10);
   const [apiAddress, setAPIAddress] = useState("");
   const [alertState, setAlertState] = useState<IAlertState>({show: false, message: "no message"});
+  const [waiting, setWaiting] = useState(false);
+  const [manoHand, setManoHand] = useState<IManoHand | undefined>(undefined);
 
   useEffect(() => {
     const hostname = window.location.hostname;
@@ -36,10 +39,13 @@ const Home: NextPage = () => {
       return;
     }
 
+    setWaiting(true);
     setAlertState({show: false, message: ""});
 
-    requestMeanPose(apiAddress, numPCA);
-
+    requestMeanPose(apiAddress, numPCA).then((manoHand) => {
+      setWaiting(false);
+      setManoHand(manoHand);
+    });
   }
 
   return (
@@ -63,11 +69,10 @@ const Home: NextPage = () => {
               <span className="label-text"># of pose PCA</span>
             </label>
             <input type="text" className="input input-primary" defaultValue={numPCA} onChange={updateNumPCA} placeholder={"only integer larger than 3"}></input>
-            <button className='btn btn-primary mt-1' onClick={loadDefaultPose}>load default</button>
+            <button className='btn btn-primary mt-1' onClick={loadDefaultPose} disabled={waiting}>load default</button>
           </div>
           <div className='border-2 h-full' id='editor-wrapper'>
-            <Editor />
-            {/* <div>hey</div> */}
+            <Editor manoHand={manoHand} />
           </div>
         </div>
       </div>

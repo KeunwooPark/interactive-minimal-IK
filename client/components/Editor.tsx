@@ -4,6 +4,7 @@ import React, { MutableRefObject, useEffect, useState } from "react";
 import * as THREE from "three";
 import { Vector3 } from "three";
 import IManoHand from "../helpers/IManoHand";
+import HandMeshPlot from "./HandMeshPlot";
 import KeypointsPlot from "./KeypointsPlot";
 
 export interface IEditorProps {
@@ -25,6 +26,7 @@ export default function Editor(props: IEditorProps) {
         <primitive object={new THREE.AxesHelper(10)} />
         
         <KeypointsPlot keypoints={props.manoHand == null? undefined : props.manoHand.keypoints} onKeypointUpdate={onKeypointUpdate} />
+        <HandMeshPlot manoHand={props.manoHand} />
         <ambientLight />
     </Canvas>);
 }

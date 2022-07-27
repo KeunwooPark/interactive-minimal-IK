@@ -74,7 +74,7 @@ const Home: NextPage = () => {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       
-      <div className='flex h-max pb-3'>
+      <div className='flex h-max my-3'>
         <div className='mt-3 mx-auto w-4/6 text-5xl'>
           <h1 className="text-center mb-5">interactive minimal IK</h1>
           <Alert {...alertState} />

@@ -10,6 +10,7 @@ import KeypointsPlot from "./KeypointsPlot";
 export interface IEditorProps {
     manoHand: IManoHand | undefined;
     newKeypointsRef: MutableRefObject<number[][] | undefined>;
+    wireframe: boolean;
 }
 
 export default function Editor(props: IEditorProps) {
@@ -24,9 +25,9 @@ export default function Editor(props: IEditorProps) {
 
     return (<Canvas linear>
         <primitive object={new THREE.AxesHelper(10)} />
-        
+        <pointLight position={[0, 20, 10]} intensity={1.5} />
         <KeypointsPlot keypoints={props.manoHand == null? undefined : props.manoHand.keypoints} onKeypointUpdate={onKeypointUpdate} />
-        <HandMeshPlot manoHand={props.manoHand} />
+        <HandMeshPlot manoHand={props.manoHand} wireframe={props.wireframe} />
         <ambientLight />
     </Canvas>);
 }

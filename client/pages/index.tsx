@@ -15,6 +15,7 @@ const Home: NextPage = () => {
   const [alertState, setAlertState] = useState<IAlertState>({show: false, message: "no message"});
   const [waiting, setWaiting] = useState(false);
   const [manoHand, setManoHand] = useState<IManoHand | undefined>(undefined);
+  const [wireframe, setWireframe] = useState(false);
 
   const newKeypointsRef = useRef<number[][]>();
 
@@ -66,6 +67,10 @@ const Home: NextPage = () => {
       setWaiting(false)});
   }
 
+  function clickWireframe(e: any) {
+    setWireframe(!wireframe);
+  }
+
   return (
     <div>
       <Head>
@@ -90,10 +95,16 @@ const Home: NextPage = () => {
             <button className='btn btn-primary mt-1' onClick={clickLoadDefaultPose} disabled={waiting}>load default</button>
           </div>
           <div className='border-2 h-full' id='editor-wrapper'>
-            <Editor newKeypointsRef={newKeypointsRef} manoHand={manoHand} />
+            <Editor newKeypointsRef={newKeypointsRef} manoHand={manoHand} wireframe={wireframe} />
           </div>
 
           <div className='flex flex-col my-2'>
+          <div className="form-control">
+            <label className="label cursor-pointer">
+              <span className="label-text">wireframe</span>
+              <input type="checkbox" className="toggle toggle-primary" checked={wireframe} onChange={clickWireframe} />
+            </label>
+          </div>
             <button className='btn btn-primary mt-1' disabled={waiting} onClick={clickSolveIK}>find mano params</button>
             <ParamDisplay manoHand={manoHand} />
           </div>

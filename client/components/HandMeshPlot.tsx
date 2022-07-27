@@ -50,7 +50,13 @@ export default function HandMeshPlot(props: IHandMeshPlotProps) {
         props.onHandMeshChange(mesh);
     }, [props.manoHand]);
 
+    let meshColor = "gray";
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        // dark mode
+        meshColor = "white";
+    }
+
     return <mesh ref={meshRef}>
-        <meshBasicMaterial color={"grey"} opacity={0.2} transparent wireframe={props.wireframe} />
+        <meshBasicMaterial color={meshColor} opacity={0.2} transparent wireframe={props.wireframe} />
     </mesh>;
 }

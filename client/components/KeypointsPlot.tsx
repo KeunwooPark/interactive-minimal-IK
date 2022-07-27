@@ -24,16 +24,15 @@ export default function KeypointsPlot(props: IKeypointsPlotProps) {
         const _spheres: JSX.Element[] = [];
         const _positionMap: Map<string, Vector3> = new Map();
         const _jointNames: string[] = [];
-        let keyId = 0;
-        for (const keypoint of props.keypoints) {
+        for (let i=0; i<props.keypoints.length; i++) {
+            const keypoint = props.keypoints[i];
             const position = new Vector3(keypoint[0], keypoint[1], keypoint[2]);
-            const key = `joint-${keyId}`;
+            const key = `joint-${i}`;
             
-            const sphere = <KeypointSphere position={position} key={key} name={key} />
+            const sphere = <KeypointSphere position={position} key={key} name={key} color={"DodgerBlue"} />
             _spheres.push(sphere);
             _jointNames.push(key);
             _positionMap.set(key, position.clone());
-            keyId += 1;
         }
 
         setKeypointSpheres(_spheres);

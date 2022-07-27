@@ -87,15 +87,15 @@ const Home: NextPage = () => {
               <span className="label-text"># of pose PCA</span>
             </label>
             <input type="text" className="input input-primary" defaultValue={numPCA} onChange={updateNumPCA} placeholder={"only integer larger than 3"}></input>
-            <button className='btn btn-primary mt-1' onClick={clickLoadDefaultPose} disabled={waiting}>load default</button>
           </div>
-          <Editor newKeypointsRef={newKeypointsRef} manoHand={manoHand} />
-
-          <div className='flex flex-col my-2'>
-          
-            <button className='btn btn-primary mt-1' disabled={waiting} onClick={clickSolveIK}>find mano params</button>
+          <div className='grid grid-rows-1 grid-cols-2 gap-4'>
+            <button className='btn btn-primary mt-1' onClick={clickLoadDefaultPose} disabled={waiting}>load default pose</button>
+            <button className='btn btn-primary mt-1' disabled={waiting} onClick={clickSolveIK}>find mano pose params</button>
+          </div>
+          <div className='flex flex-col my-2'>          
             <ParamDisplay manoHand={manoHand} />
           </div>
+          <Editor newKeypointsRef={newKeypointsRef} manoHand={manoHand} />
         </div>
       </div>
     </div>

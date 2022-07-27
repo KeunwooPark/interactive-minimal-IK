@@ -16,7 +16,8 @@ export default function ParamDisplay(props: IParamDisplayProps) {
     }
 
     return (<div className="mt-2">
-        <textarea className="textarea w-full inline-block" placeholder="mano params will show up here." value={getParamsText()} readOnly>
+        <div className="text-base font-bold">mano pose parameters</div>
+        <textarea className="textarea textarea-bordered w-full inline-block" placeholder="mano params will show up here." value={getParamsText()} readOnly>
         </textarea>
     </div>);
 }

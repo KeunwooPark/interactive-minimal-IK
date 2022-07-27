@@ -5,6 +5,7 @@ import { Vector3 } from "three";
 export interface IKeypointSphereProps {
     position: Vector3;
     name: string;
+    color: string;
 }
 export default function KeypointSphere(props: IKeypointSphereProps) {
     const sphereSize = 2;
@@ -19,6 +20,6 @@ export default function KeypointSphere(props: IKeypointSphereProps) {
     }
 
     return (<Sphere args={[sphereSize]} position={props.position} onPointerEnter={handleOnPointerEnter} onPointerLeave={handleOnPointerLeave} name={props.name}>
-        <meshBasicMaterial color={pointerIn? "LightSeaGreen" :"hotpink"} />
+        <meshBasicMaterial color={pointerIn? "hotpink" : props.color} />
     </Sphere>);
 }

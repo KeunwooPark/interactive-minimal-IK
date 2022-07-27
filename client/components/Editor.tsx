@@ -51,8 +51,8 @@ export default function Editor(props: IEditorProps) {
     }
 
     return (
-        <div className="h-full">
-            <div className="h-5/6">
+        <div className="h-fit">
+            <div className="h-screen">
                 <Canvas className="border-2" linear>
                     <primitive object={new THREE.AxesHelper(10)} />
                     <pointLight position={[0, 20, 10]} intensity={1.5} />

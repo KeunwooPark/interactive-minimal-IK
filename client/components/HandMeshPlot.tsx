@@ -1,11 +1,11 @@
-import { Ref, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState} from "react";
-import { Mesh, Vector3 } from "three";
+import { forwardRef, Ref, useEffect, useLayoutEffect, useMemo, useReducer, useRef, useState} from "react";
+import { BufferAttribute, BufferGeometry, Mesh, Vector3 } from "three";
 import IManoHand from "../helpers/IManoHand";
-import * as THREE from "three";
 
-export interface IHandMeshPloProps {
+export interface IHandMeshPlotProps {
     manoHand: IManoHand | undefined;
     wireframe: boolean;
+    onHandMeshChange: (mesh: Mesh) => void
 }
 
 function arrangeVertices(manoHand: IManoHand): Float32Array {
@@ -27,7 +27,7 @@ function arrangeVertices(manoHand: IManoHand): Float32Array {
     return Float32Array.from(arrangedVertices);
 }
 
-export default function HandMeshPlot(props: IHandMeshPloProps) {
+export default function HandMeshPlot(props: IHandMeshPlotProps) {
 
     const meshRef = useRef<Mesh>(null);
 
@@ -44,10 +44,10 @@ export default function HandMeshPlot(props: IHandMeshPloProps) {
 
         const vertices = arrangeVertices(props.manoHand);
 
-        const geometry = new THREE.BufferGeometry();
-        geometry.setAttribute("position", new THREE.BufferAttribute(vertices, 3));
+        const geometry = new BufferGeometry();
+        geometry.setAttribute("position", new BufferAttribute(vertices, 3));
         mesh.geometry = geometry;
-
+        props.onHandMeshChange(mesh);
     }, [props.manoHand]);
 
     return <mesh ref={meshRef}>

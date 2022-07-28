@@ -1,69 +1,41 @@
-# Minimal-IK
+# interacive minmal IK
 
-A simple and naive inverse kinematics solver for MANO hand model, SMPL body model, and SMPL-H body+hand model.
+This is a tool to find MANO pose parameters for specific hand poses. The IK engine is forked from [CalciferZh/Minimal-IK
+](https://github.com/CalciferZh/Minimal-IK).
 
-Briefly, given joint coordinates (and optional other keypoints), the solver gives the corresponding model parameters.
+![there are two text input boxes on the top labeled as API server address and the number of pose PCA. Next, there are two buttons to load default pose and find mano pose parameters. On its bottom, there is a text output for MANO pose parameters. There is a 3D hand pose editor on the center of the page. On the bottom of the page, there is a button to export the object file.](interactive-minimal-ik.png "interactive minimal IK")
 
-Levenberg–Marquardt algorithm is used, the energy is simply the L2 distance between the keypoints.
+[quick video tutorial](https://youtu.be/EojVdM7cloE)
 
-As no prior nor regularization terms are used, it is not surprising that the code does not work well on "real" data. My intention to release the code was to give some hints on how to develope a customized IK solver. I would recommend to add more complicating terms for better performance.
+## how to run
 
-## Results
+1. prepare Mano model
 
-### Qualitative
+Download the MANO model from the [official website](https://mano.is.tue.mpg.de/) and put the MANO model under `api/mano`. Or, you can put the model whereever you want to and change the `OFFICIAL_MANO_PATH` in `api/config.py`.
 
-This is the example result on the SMPL body model.
-The left is the ground truth, and the right one is the estimation.
-You can notice the minor difference between the left hands.
+2. install requirements for the API server
 
-![](body.png)
+```sh
+$ pip install -r api/requirements.txt
+```
 
-Below is the example result of the MANO hand model.
-Left for ground truth, and right for estimation.
+3. run the API server
 
-![](hand.png)
+```sh
+$ ./api/run_api/server.sh
+```
 
-### Quantitative
+4. install packages for the client server
+```sh
+$ cd client
+$ npm install
+```
 
-We test this approach on the [AMASS dataset](https://amass.is.tue.mpg.de/).
+5. run the client server (nextjs)
 
-|             | Mean Joint Error (mm) | Mean Vertex Error (mm) |
-| ----------  | --------------------- | ---------------------- |
-| SMPL (body) | 14.406                | 23.110                 |
-| MANO (hand) | 2.15                  | 3.42                   |
+```sh
+# you will be in the client directory
+$ npm run dev
+```
 
-We assume that the global rotation is known.
-We discuss this further in the `Customization Notes` section.
-
-## Usage
-
-### Models
-
-1. Download the official model from MPI.
-2. See `config.py` and set the official model path.
-3. See `prepare_model.py`, use the provided function to pre-process the model.
-
-### Solver
-
-1. See `example.py`, un-comment the corresponding code.
-2. `python example.py`.
-3. The example ground truth mesh and estimated mesh are saved to `gt.obj` and `est.obj` respectively.
-
-### Dependencies
-
-Every required package is available via `pip install`.
-
-### Customization Notes
-
-Again, we note that this approach cannot handle large global rotations (R0) due to the high non-convexity.
-For example, when the subject keeps the T pose but faces backwards.
-
-In such cases, a good initialization, at least for R0, is necessary.
-
-We also note that this approach is sensitive the the scale (i.e. length unit), as it would affect the MSE and the update step.
-Please consider using the default scale if you do not have special reasons.
-
-## Credits
-
-* @yxyyyxxyy for the quantitative test on the AMASS dataset.
-* @zjykljf for the starter code of the LM solver.
+6. access the client server.

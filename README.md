@@ -22,7 +22,8 @@ $ pip install -r api/requirements.txt
 3. run the API server
 
 ```sh
-$ ./api/run_api/server.sh
+$ cd api
+$ ./run_api_server.sh
 ```
 
 4. install packages for the client server

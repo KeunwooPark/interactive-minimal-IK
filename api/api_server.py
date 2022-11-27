@@ -40,7 +40,7 @@ async def getMeanPose(n_pose: int):
 
 class IKData(BaseModel):
     keypoints: list
-    n_pose: Any
+    n_pose: int
 
 @app.post("/api/solveIK")
 async def solveIK(ikData: IKData):
